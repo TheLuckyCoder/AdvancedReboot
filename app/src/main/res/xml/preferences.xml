@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/settings">
+        <SwitchPreference
+            android:title="@string/settings_confirm_dialog"
+            android:summary="@string/settings_confirm_dialog_desc"
+            android:defaultValue="true"
+            android:key="confirm_reboots" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Used Libraries">
+        <Preference android:title="&quot;Material Icons&quot; by Google">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://design.google.com/icons"/>
+        </Preference>
+        <Preference android:title="&quot;libsuperuser&quot; by Chainfire">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/Chainfire/libsuperuser"/>
+        </Preference>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="App Created By">
+        <Preference
+            android:title="The Lucky Coder"
+            android:icon="@drawable/ic_copyright">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.theluckycoder.net"/>
+        </Preference>
+    </PreferenceCategory>
+</PreferenceScreen>

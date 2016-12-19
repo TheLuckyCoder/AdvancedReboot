@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Advanced Reboot</string>
+    <string name="app_name_short">Reboot</string>
+    <string name="banner_ad_unit_id">ca-app-pub-1279472163660969/9732201134</string>
+
+    <!-- REBOOT TYPES -->
+    <string name="reboot">Reboot</string>
+    <string name="reboot_desc">Performs simple reboot</string>
+
+    <string name="safe_mode">Safe Mode</string>
+    <string name="safe_mode_desc">Reboot in Safe Mode(Disables all user installed apps)</string>
+
+    <string name="recovery">Recovery</string>
+    <string name="recovery_desc">Reboot in Recovery</string>
+
+    <string name="bootloader">Bootloader</string>
+    <string name="bootloader_desc">Reboot Bootloader</string>
+
+    <string name="download">Download Mode</string>
+    <string name="download_desc">Reboot in Download Mode</string>
+
+    <string name="shutdown">Power Off</string>
+    <string name="shutdown_desc">Shutdown the device</string>
+
+    <string name="restart_interface">System UI</string>
+    <string name="restart_interface_desc">Restart the Android User Interface</string>
+
+    <string name="reboot_fast">Fast Reboot</string>
+    <string name="reboot_fast_desc">Perform a quick reboot</string>
+
+    <!-- SETTINGS -->
+    <string name="settings">Settings</string>
+    <string name="settings_and_info">Settings and Information</string>
+    <string name="settings_confirm_dialog">Confirm Reboots</string>
+    <string name="settings_confirm_dialog_desc">Show a confirm dialog for every reboot</string>
+    <string name="rebooting_device">Rebooting device</string>
+</resources>
