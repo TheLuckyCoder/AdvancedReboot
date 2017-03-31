@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import eu.chainfire.libsuperuser.Shell;
 
-class RebootTask extends AsyncTask<Void, Void, Void> {
+final class RebootTask extends AsyncTask<Void, Void, Void> {
 
     private final String[] commands;
 

@@ -21,7 +21,7 @@ import com.google.android.gms.ads.AdView;
 
 import static net.theluckycoder.advancedreboot.R.id.adView;
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
 
     static { AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); }
     private Context context;
@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         });
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template")
-                .addTestDevice("25574AADC886BF75BA5620CCCABA220C")
                 .build();
         mAdView.loadAd(adRequest);
     }
