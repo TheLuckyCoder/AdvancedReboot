@@ -7,7 +7,7 @@
             android:defaultValue="true"
             android:key="confirm_reboots" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Used Libraries">
+    <PreferenceCategory android:title="Used Libraries and Tools">
         <Preference android:title="&quot;Material Icons&quot; by Google">
             <intent
                 android:action="android.intent.action.VIEW"

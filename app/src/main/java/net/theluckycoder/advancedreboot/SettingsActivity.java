@@ -9,8 +9,8 @@ public final class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
     }

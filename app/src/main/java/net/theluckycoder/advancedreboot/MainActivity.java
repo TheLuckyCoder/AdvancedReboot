@@ -1,7 +1,6 @@
 package net.theluckycoder.advancedreboot;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -24,14 +23,12 @@ import static net.theluckycoder.advancedreboot.R.id.adView;
 public final class MainActivity extends AppCompatActivity {
 
     static { AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); }
-    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(R.string.app_name);
-        context = this;
 
         if (Build.MANUFACTURER.matches("samsung"))
             findViewById(R.id.bootloaderReboot).setVisibility(View.GONE);
@@ -99,8 +96,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void confirmDialog(final String[] commands) {
-        if (PreferenceManager.getDefaultSharedPreferences(context).getBoolean("confirm_reboots", true)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_reboots", true)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Do you want to continue");
             builder.setMessage("Are you sure you want to reboot your phone?");
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -118,7 +115,7 @@ public final class MainActivity extends AppCompatActivity {
 
     private void showProgressDialog(String[] commands) {
         new RebootTask(commands).execute();
-        ProgressDialog progressDialog = new ProgressDialog(context);
+        ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setTitle(getString(R.string.rebooting_device));
         progressDialog.show();
     }
