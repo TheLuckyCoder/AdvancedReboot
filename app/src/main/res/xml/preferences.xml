@@ -11,21 +11,20 @@
         <Preference android:title="&quot;Material Icons&quot; by Google">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://design.google.com/icons"/>
+                android:data="https://material.io/icons/" />
         </Preference>
         <Preference android:title="&quot;libsuperuser&quot; by Chainfire">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="https://github.com/Chainfire/libsuperuser"/>
+                android:data="https://github.com/Chainfire/libsuperuser" />
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory android:title="App Created By">
         <Preference
-            android:title="The Lucky Coder"
-            android:icon="@drawable/ic_copyright">
+            android:title="The Lucky Coder">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:data="http://www.theluckycoder.net"/>
+                android:data="http://www.theluckycoder.net" />
         </Preference>
     </PreferenceCategory>
 </PreferenceScreen>

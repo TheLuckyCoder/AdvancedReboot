@@ -6,16 +6,15 @@ import eu.chainfire.libsuperuser.Shell;
 
 final class RebootTask extends AsyncTask<Void, Void, Void> {
 
-    private final String[] commands;
+    private final String[] mCommands;
 
     RebootTask(String[] commands) {
-        this.commands = commands;
+        mCommands = commands;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        if (Shell.SU.available())
-            Shell.SU.run(commands);
+        Shell.SU.run(mCommands);
         return null;
     }
 }
