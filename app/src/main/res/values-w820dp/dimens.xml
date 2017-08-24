@@ -1,5 +1,4 @@
 <resources>
-    <dimen name="activity_margin">64dp</dimen>
     <dimen name="activity_padding">32dp</dimen>
     <dimen name="card_view_margin">12dp</dimen>
 </resources>
