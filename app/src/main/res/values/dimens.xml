@@ -1,4 +1,5 @@
 <resources>
-    <dimen name="activity_padding">2dp</dimen>
     <dimen name="card_view_margin">8dp</dimen>
+    <dimen name="card_margin_horizontal">8dp</dimen>
+    <dimen name="card_margin_vertical">8dp</dimen>
 </resources>

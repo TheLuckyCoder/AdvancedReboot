@@ -31,15 +31,17 @@
     <!-- SETTINGS -->
     <string name="settings">Settings</string>
     <string name="settings_and_info">Settings and Information</string>
-    <string name="settings_confirm_dialog">Confirm Reboots</string>
-    <string name="settings_confirm_dialog_desc">Show a confirm dialog for every reboot</string>
+    <string name="pref_confirm_dialog">Confirm Reboots</string>
+    <string name="pref_confirm_dialog_desc">Show a confirm dialog for every reboot</string>
 
     <!-- OTHER -->
     <string name="quit">Quit</string>
-    <string name="restart_app">Restart app</string>
+    <string name="restart_app">Restart the app</string>
     <string name="root_required">Your device is not Rooted</string>
     <string name="root_required_desc">Your device does not have Root access. Root is required in order for this app to work.</string>
     <string name="rebooting_device">Rebooting device</string>
     <string name="confirm_continue">Do you want to continue</string>
     <string name="confirm_continue_desc">Are you sure you want to reboot your phone?</string>
+    <string name="pref_dark_theme">Use Dark Theme</string>
+    <string name="pref_dark_theme_desc">An app restart might be required in order to apply this settings</string>
 </resources>

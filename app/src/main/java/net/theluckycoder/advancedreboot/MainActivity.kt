@@ -18,29 +18,36 @@ import com.google.android.gms.ads.InterstitialAd
 import com.google.firebase.analytics.FirebaseAnalytics
 import eu.chainfire.libsuperuser.Shell
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var mInterstitialAd: InterstitialAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setTitle(R.string.app_name)
 
-        if (Build.MANUFACTURER.toString().toLowerCase() == ("samsung"))
+        if (Build.MANUFACTURER.toString().toLowerCase() == "samsung") {
             findViewById<View>(R.id.bootloaderReboot).visibility = View.GONE
-        else
+        } else {
             findViewById<View>(R.id.downloadReboot).visibility = View.GONE
+        }
 
         checkForRoot()
 
-        //Init AdMob
-        val mAdView = findViewById<AdView>(R.id.adView)
+        // Init AdMob
+        val adView: AdView = findViewById(R.id.adView)
         val adRequest = AdRequest.Builder()
                 .addTestDevice("304C7D4CF3DD1D2C556771826CCF9037")
                 .build()
-        mAdView.loadAd(adRequest)
+        adView.loadAd(adRequest)
 
         mInterstitialAd = InterstitialAd(this)
         mInterstitialAd.adUnitId = "ca-app-pub-1279472163660969/3259304920"
@@ -55,6 +62,22 @@ class MainActivity : AppCompatActivity() {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 8) {
+            val useDarkTheme = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false)
+
+            if (!useDarkTheme && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            } else if (useDarkTheme && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+
+            recreate()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_main, menu)
@@ -62,80 +85,59 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_settings)
-                startActivity(Intent(this, SettingsActivity::class.java))
+        if (item.itemId == R.id.menu_settings) {
+            startActivityForResult(Intent(this, SettingsActivity::class.java), 8)
+        }
         return super.onOptionsItemSelected(item)
     }
 
     fun reboot(view: View) {
-        val params = Bundle()
-
         when (view.id) {
-            R.id.normalReboot -> {
-                confirmDialog(arrayOf("reboot"))
-                params.putString("type", "normal")
-            }
-            R.id.fastReboot -> {
-                confirmDialog(arrayOf("setprop ctl.restart zygote"))
-                params.putString("type", "fast")
-            }
-            R.id.recoveryReboot -> {
-                confirmDialog(arrayOf("reboot recovery"))
-                params.putString("type", "recovery")
-            }
-            R.id.bootloaderReboot -> {
-                confirmDialog(arrayOf("reboot bootloader"))
-                params.putString("type", "bootloader")
-            }
-            R.id.downloadReboot -> {
-                confirmDialog(arrayOf("reboot download"))
-                params.putString("type", "bootloader")
-            }
-            R.id.safeModeReboot -> {
-                confirmDialog(arrayOf("setprop persist.sys.safemode 1", "reboot"))
-                params.putString("type", "safeMode")
-            }
-            R.id.interfaceReboot -> {
-                confirmDialog(arrayOf("pkill com.android.systemui"))
-                params.putString("type", "interface")
-            }
-            R.id.shutdownReboot -> {
-                confirmDialog(arrayOf("reboot -p"))
-                params.putString("type", "shutdown")
-            }
+            R.id.normalReboot -> confirmDialog(arrayOf("reboot"), "normal")
+            R.id.fastReboot -> confirmDialog(arrayOf("setprop ctl.restart zygote"), "fast")
+            R.id.recoveryReboot -> confirmDialog(arrayOf("reboot recovery"), "recovery")
+            R.id.bootloaderReboot -> confirmDialog(arrayOf("reboot bootloader"), "bootloader")
+            R.id.downloadReboot -> confirmDialog(arrayOf("reboot download"), "bootloader")
+            R.id.safeModeReboot -> confirmDialog(arrayOf("setprop persist.sys.safemode 1", "reboot"), "safeMode")
+            R.id.interfaceReboot -> confirmDialog(arrayOf("pkill com.android.systemui"), "interface")
+            R.id.shutdownReboot -> confirmDialog(arrayOf("reboot -p"), "shutdown")
         }
-
-        mFirebaseAnalytics.logEvent("reboot", params)
     }
 
     private fun checkForRoot() {
-        if (!Shell.SU.available()) {
-            val dialog = AlertDialog.Builder(this)
-            dialog.setTitle(R.string.root_required)
-            dialog.setMessage(R.string.root_required_desc)
-            dialog.setCancelable(false)
-            dialog.setNegativeButton(R.string.quit) { _, _ -> finish() }
-            dialog.setPositiveButton(R.string.restart_app) { _, _ -> recreate() }
-            dialog.show()
-        }
+        if (BuildConfig.DEBUG || Shell.SU.available()) return
+
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle(R.string.root_required)
+        dialog.setMessage(R.string.root_required_desc)
+        dialog.setCancelable(false)
+        dialog.setNegativeButton(R.string.quit) { _, _ -> finish() }
+        dialog.setPositiveButton(R.string.restart_app) { _, _ -> recreate() }
+        dialog.show()
     }
 
-    private fun confirmDialog(commands: Array<String>) {
+    private fun confirmDialog(commands: Array<String>, type: String) {
+        val params = Bundle()
+        params.putString("type", type)
+        mFirebaseAnalytics.logEvent("reboot", params)
+
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_reboots", true)) {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(R.string.confirm_continue)
-            builder.setMessage(R.string.confirm_continue_desc)
-            builder.setPositiveButton(android.R.string.yes) { _, _ -> showProgressDialog(commands) }
-            builder.setNegativeButton(android.R.string.no, null)
-            builder.show()
+            AlertDialog.Builder(this)
+                    .setTitle(R.string.confirm_continue)
+                    .setMessage(R.string.confirm_continue_desc)
+                    .setPositiveButton(android.R.string.yes) { _, _ -> showProgressDialog(commands) }
+                    .setNegativeButton(android.R.string.no, null)
+                    .show()
 
             if (mInterstitialAd.isLoaded) mInterstitialAd.show()
-        } else
+        } else {
             showProgressDialog(commands)
+        }
     }
 
     private fun showProgressDialog(commands: Array<String>) {
         RebootTask(commands).execute()
+
         val progressDialog = ProgressDialog(this)
         progressDialog.setTitle(getString(R.string.rebooting_device))
         progressDialog.setCancelable(false)
@@ -149,10 +151,6 @@ class MainActivity : AppCompatActivity() {
                 .build()
 
         mInterstitialAd.loadAd(adRequest)
-    }
-
-    companion object {
-        init { AppCompatDelegate.setCompatVectorFromResourcesEnabled(true) }
     }
 
 }

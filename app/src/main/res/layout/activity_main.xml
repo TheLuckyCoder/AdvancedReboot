@@ -6,14 +6,12 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/adView"
-        android:background="#EEEEEE">
+        android:layout_above="@+id/adView">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/activity_padding"
-            android:paddingRight="@dimen/activity_padding">
+            android:orientation="vertical">
+
             <include layout="@layout/reboot_normal" />
             <include layout="@layout/reboot_fast" />
             <include layout="@layout/reboot_recovery" />
@@ -22,6 +20,7 @@
             <include layout="@layout/reboot_safe_mode" />
             <include layout="@layout/reboot_interface" />
             <include layout="@layout/reboot_shutdown" />
+
         </LinearLayout>
     </ScrollView>
 

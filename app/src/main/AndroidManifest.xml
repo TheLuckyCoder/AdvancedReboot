@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,10 +18,10 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" /><meta-data
-        android:name="firebase_analytics_collection_deactivated"
-        android:value="@string/firebase_disabled" />
-
+            android:value="2.1" />
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="@bool/firebase_disabled" />
 
         <activity
             android:name=".MainActivity">

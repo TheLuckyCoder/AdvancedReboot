@@ -2,12 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/settings">
         <SwitchPreference
-            android:title="@string/settings_confirm_dialog"
-            android:summary="@string/settings_confirm_dialog_desc"
+            android:title="@string/pref_confirm_dialog"
+            android:summary="@string/pref_confirm_dialog_desc"
             android:defaultValue="true"
             android:key="confirm_reboots" />
+        <SwitchPreference
+            android:title="@string/pref_dark_theme"
+            android:summary="@string/pref_dark_theme_desc"
+            android:defaultValue="false"
+            android:key="dark_theme" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Used Libraries and Tools">
+
+    <PreferenceCategory android:title="Libraries and Tools">
         <Preference android:title="&quot;Material Icons&quot; by Google">
             <intent
                 android:action="android.intent.action.VIEW"
@@ -19,6 +25,7 @@
                 android:data="https://github.com/Chainfire/libsuperuser" />
         </Preference>
     </PreferenceCategory>
+
     <PreferenceCategory android:title="App Created By">
         <Preference
             android:title="The Lucky Coder">
