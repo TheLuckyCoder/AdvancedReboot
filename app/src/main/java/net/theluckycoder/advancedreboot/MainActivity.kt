@@ -4,28 +4,20 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdView
-import com.google.android.gms.ads.InterstitialAd
-import com.google.firebase.analytics.FirebaseAnalytics
+import androidx.preference.PreferenceManager
 import eu.chainfire.libsuperuser.Shell
-
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    private lateinit var mInterstitialAd: InterstitialAd
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false)){
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("dark_theme", false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -34,32 +26,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (Build.MANUFACTURER.toString().toLowerCase() == "samsung") {
+        if (Build.MANUFACTURER.toString().toLowerCase(Locale.ROOT) == "samsung") {
             findViewById<View>(R.id.bootloaderReboot).visibility = View.GONE
         } else {
             findViewById<View>(R.id.downloadReboot).visibility = View.GONE
         }
 
         checkForRoot()
-
-        // Init AdMob
-        val adView: AdView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder()
-                .addTestDevice("304C7D4CF3DD1D2C556771826CCF9037")
-                .build()
-        adView.loadAd(adRequest)
-
-        mInterstitialAd = InterstitialAd(this)
-        mInterstitialAd.adUnitId = "ca-app-pub-1279472163660969/3259304920"
-        mInterstitialAd.adListener = object : AdListener() {
-            override fun onAdClosed() {
-                requestNewInterstitial()
-            }
-        }
-        requestNewInterstitial()
-
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,64 +66,51 @@ class MainActivity : AppCompatActivity() {
 
     fun reboot(view: View) {
         when (view.id) {
-            R.id.normalReboot -> confirmDialog(arrayOf("reboot"), "normal")
-            R.id.fastReboot -> confirmDialog(arrayOf("setprop ctl.restart zygote"), "fast")
-            R.id.recoveryReboot -> confirmDialog(arrayOf("reboot recovery"), "recovery")
-            R.id.bootloaderReboot -> confirmDialog(arrayOf("reboot bootloader"), "bootloader")
-            R.id.downloadReboot -> confirmDialog(arrayOf("reboot download"), "bootloader")
-            R.id.safeModeReboot -> confirmDialog(arrayOf("setprop persist.sys.safemode 1", "reboot"), "safeMode")
-            R.id.interfaceReboot -> confirmDialog(arrayOf("pkill com.android.systemui"), "interface")
-            R.id.shutdownReboot -> confirmDialog(arrayOf("reboot -p"), "shutdown")
+            R.id.normalReboot -> confirmDialog(listOf("reboot"))
+            R.id.fastReboot -> confirmDialog(listOf("setprop ctl.restart zygote"))
+            R.id.recoveryReboot -> confirmDialog(listOf("reboot recovery"))
+            R.id.bootloaderReboot -> confirmDialog(listOf("reboot bootloader"))
+            R.id.downloadReboot -> confirmDialog(listOf("reboot download"))
+            R.id.safeModeReboot -> confirmDialog(listOf("setprop persist.sys.safemode 1", "reboot"))
+            R.id.interfaceReboot -> confirmDialog(listOf("pkill com.android.systemui"))
+            R.id.shutdownReboot -> confirmDialog(listOf("reboot -p"))
         }
     }
 
     private fun checkForRoot() {
         if (BuildConfig.DEBUG || Shell.SU.available()) return
 
-        val dialog = AlertDialog.Builder(this)
-        dialog.setTitle(R.string.root_required)
-        dialog.setMessage(R.string.root_required_desc)
-        dialog.setCancelable(false)
-        dialog.setNegativeButton(R.string.quit) { _, _ -> finish() }
-        dialog.setPositiveButton(R.string.restart_app) { _, _ -> recreate() }
-        dialog.show()
+        AlertDialog.Builder(this)
+            .setTitle(R.string.root_required)
+            .setMessage(R.string.root_required_desc)
+            .setCancelable(false)
+            .setNegativeButton(R.string.quit) { _, _ -> finish() }
+            .setPositiveButton(R.string.restart_app) { _, _ -> recreate() }
+            .show()
     }
 
-    private fun confirmDialog(commands: Array<String>, type: String) {
-        val params = Bundle()
-        params.putString("type", type)
-        mFirebaseAnalytics.logEvent("reboot", params)
-
+    private fun confirmDialog(commands: List<String>) {
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("confirm_reboots", true)) {
             AlertDialog.Builder(this)
-                    .setTitle(R.string.confirm_continue)
-                    .setMessage(R.string.confirm_continue_desc)
-                    .setPositiveButton(android.R.string.yes) { _, _ -> showProgressDialog(commands) }
-                    .setNegativeButton(android.R.string.no, null)
-                    .show()
-
-            if (mInterstitialAd.isLoaded) mInterstitialAd.show()
+                .setTitle(R.string.confirm_continue)
+                .setMessage(R.string.confirm_continue_desc)
+                .setPositiveButton(android.R.string.yes) { _, _ -> showProgressDialog(commands) }
+                .setNegativeButton(android.R.string.no, null)
+                .show()
         } else {
             showProgressDialog(commands)
         }
     }
 
-    private fun showProgressDialog(commands: Array<String>) {
-        RebootTask(commands).execute()
+    private fun showProgressDialog(commands: List<String>) {
+        RebootTask.execute(commands)
 
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setTitle(getString(R.string.rebooting_device))
-        progressDialog.setCancelable(false)
-        progressDialog.isIndeterminate = true
-        progressDialog.show()
+        @Suppress("DEPRECATION")
+        ProgressDialog(this).apply {
+            setTitle(getString(R.string.rebooting_device))
+            setCancelable(false)
+            isIndeterminate = true
+            show()
+        }
     }
-
-    private fun requestNewInterstitial() {
-        val adRequest = AdRequest.Builder()
-                .addTestDevice("304C7D4CF3DD1D2C556771826CCF9037")
-                .build()
-
-        mInterstitialAd.loadAd(adRequest)
-    }
-
 }

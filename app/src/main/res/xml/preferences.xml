@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/settings">
-        <SwitchPreference
-            android:title="@string/pref_confirm_dialog"
-            android:summary="@string/pref_confirm_dialog_desc"
+
+        <SwitchPreferenceCompat
             android:defaultValue="true"
-            android:key="confirm_reboots" />
-        <SwitchPreference
-            android:title="@string/pref_dark_theme"
-            android:summary="@string/pref_dark_theme_desc"
+            android:key="confirm_reboots"
+            android:summary="@string/pref_confirm_dialog_desc"
+            android:title="@string/pref_confirm_dialog" />
+
+        <SwitchPreferenceCompat
             android:defaultValue="false"
-            android:key="dark_theme" />
+            android:key="dark_theme"
+            android:summary="@string/pref_dark_theme_desc"
+            android:title="@string/pref_dark_theme" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Libraries and Tools">
+
         <Preference android:title="&quot;Material Icons&quot; by Google">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://material.io/icons/" />
         </Preference>
+
         <Preference android:title="&quot;libsuperuser&quot; by Chainfire">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://github.com/Chainfire/libsuperuser" />
         </Preference>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="App Created By">
-        <Preference
-            android:title="The Lucky Coder">
+
+        <Preference android:title="The Lucky Coder">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="http://www.theluckycoder.net" />
         </Preference>
+
     </PreferenceCategory>
 </PreferenceScreen>

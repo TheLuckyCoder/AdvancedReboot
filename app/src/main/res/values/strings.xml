@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Advanced Reboot</string>
-    <string name="banner_ad_unit_id">ca-app-pub-1279472163660969/9732201134</string>
 
     <!-- REBOOT TYPES -->
     <string name="reboot">Reboot</string>
@@ -14,7 +13,7 @@
     <string name="recovery_desc">Reboot in Recovery</string>
 
     <string name="safe_mode">Safe Mode</string>
-    <string name="safe_mode_desc">Reboot in Safe Mode(Disables all user installed apps)</string>
+    <string name="safe_mode_desc">Reboot in Safe Mode (Disables all user installed apps)</string>
 
     <string name="bootloader">Bootloader</string>
     <string name="bootloader_desc">Reboot to Bootloader</string>
@@ -23,7 +22,7 @@
     <string name="download_desc">Reboot in Download Mode</string>
 
     <string name="restart_interface">System UI</string>
-    <string name="restart_interface_desc">Restart the Android User Interface</string>
+    <string name="restart_interface_desc">Restart the Android User Interface (This might not work on all devices)</string>
 
     <string name="shutdown">Power Off</string>
     <string name="shutdown_desc">Shutdown the device</string>

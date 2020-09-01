@@ -1,7 +1,7 @@
 package net.theluckycoder.advancedreboot
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 
 class SettingsActivity : AppCompatActivity() {
@@ -11,7 +11,7 @@ class SettingsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        fragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(android.R.id.content, SettingsFragment()).commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -1,13 +1,15 @@
 package net.theluckycoder.advancedreboot
 
-import android.os.AsyncTask
-
 import eu.chainfire.libsuperuser.Shell
+import java.util.concurrent.Executors
 
-internal class RebootTask(private val commands: Array<String>) : AsyncTask<Void, Void, Void>() {
+internal object RebootTask {
 
-    override fun doInBackground(vararg params: Void): Void? {
-        Shell.SU.run(commands)
-        return null
+    private val executor = Executors.newSingleThreadExecutor()
+
+    fun execute(commands: List<String>) {
+        executor.execute {
+            Shell.SU.run(commands)
+        }
     }
 }
